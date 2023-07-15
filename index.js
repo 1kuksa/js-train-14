@@ -10,6 +10,13 @@
  *  day - день місяця.
  */
 function getDateDetails(date) {
+	if( typeof date.getTime !== "function") {
+		return "Помилка: вхідне значення має бути об'єктом Date"
+	}
+	let Object = {year: date.getFullYear(),
+  month: date.getMonth(),
+   day: date.getDate()};
+   return  Object
   // Перевірка, чи є вхідне значення об'єктом Date,це можно зробити перевіривши чи є date.getTime по типу функція .
   // Якщо date не є об'єктом Date, повертаємо рядок
   // "Помилка: вхідне значення має бути об'єктом Date"
@@ -31,6 +38,15 @@ console.log(getDateDetails(new Date("2023-12-25T00:00:00Z")));
  * Повертає об'єкт Date з встановленою датою, якщо вхідні дані вірні. Якщо ні, виводить повідомлення про помилку.
  */
 function setDateDetails(date, isoString) {
+	if (typeof date.getTime !== "function") {
+		return "Помилка: вхідне значення має бути об'єктом Date";
+	}
+	const parseDate = new Date (isoString);
+	if (isNaN(parseDate.getTime())) {
+		return "Помилка: недійсний ISO рядок"
+	}
+	 date = new Date(isoString);
+	return date
   // Перевірка, чи є вхідне значення об'єктом Date,це можно зробити перевіривши чи є date.getTime по типу функція .
   // Якщо date не є об'єктом Date, повертаємо рядок
   // "Помилка: вхідне значення має бути об'єктом Date"
@@ -54,6 +70,10 @@ console.log(setDateDetails(date, "2023-12-25T00:00:00Z"));
  * Повертає рядок з датою в UTC форматі, якщо вхідне значення є дійсним об'єктом Date. Якщо ні, виводить повідомлення про помилку.
  */
 function dateToUTC(date) {
+	if (typeof date.getTime !== "function") {
+		return "Помилка: вхідне значення має бути об'єктом Date";
+	}
+	return date.toUTCString();
   // Перевірка, чи є вхідне значення об'єктом Date,це можно зробити перевіривши чи є date.getTime по типу функція .
   // Якщо date не є об'єктом Date, повертаємо рядок
   // "Помилка: вхідне значення має бути об'єктом Date"
@@ -77,6 +97,11 @@ console.log(dateToUTC(new Date()));
  * Повертає об'єкт Date з встановленим часом, якщо вхідні дані вірні. Якщо ні, виводить повідомлення про помилку.
  */
 function setSpecificTime(date, hours, minutes, seconds, milliseconds) {
+	if (typeof date.getTime !== "function") {
+		return "Помилка: вхідне значення має бути об'єктом Date"
+	}
+	date.setHours(hours, minutes, seconds, milliseconds)
+	return date
   // Перевірка, чи є вхідне значення об'єктом Date,це можно зробити перевіривши чи є date.getTime по типу функція .
   // Якщо date не є об'єктом Date, повертаємо рядок
   // "Помилка: вхідне значення має бути об'єктом Date"
@@ -106,6 +131,22 @@ console.log(
  * }
  */
 function nextNewYear() {
+	let date = new Date ();
+	let yearNow = date.getFullYear();
+	let dateYear = new Date(yearNow + 1, 0, 1);
+	let diff = dateYear.getTime() - date.getTime();
+	
+	let dayYear = diff / (1000 * 60 * 60 * 24)
+	let hourYear = (diff / (1000 * 60 * 60)) % 24
+	let minYear = (diff / (1000 * 60)) % 60;
+	let secYear =(diff / 1000) % 60;
+	let milsecYear =  diff % 1000;
+	let objYear = { days: dayYear, hours: hourYear,
+	   minutes: minYear,
+	   seconds: secYear,
+	   milliseconds: milsecYear
+	}
+	return objYear
   // Створюєму змінну в яку записуємо поточну дату
   // Визначення поточного року.
   // Визначення дати наступного Нового року. Для цього створюємо новий об`єкт Date в якому збільшуємо поточний рік на 1, встановлюємо місяць на 0 а дату на 1
@@ -136,6 +177,20 @@ console.log(nextNewYear());
  * }
  */
 function isLeapYear(year) {
+	if (typeof year !== "number") {
+		return "Помилка!"
+	}
+	function result (year) {
+		if (year % 4 === 0) {
+			return true
+		}
+		else return false
+	}
+	
+	let obj = { year: year, 
+		isLeap: result (year)
+	}
+	return obj
   // Перевірка, чи є вхідне значення числом якщо ні повертаємо рядок .
   // Перевірка, чи є рік високосним.
   // Високосним вважається рік, який ділиться націло на 4
@@ -161,6 +216,22 @@ console.log(isLeapYear(2020));
  * }
  */
 function addDays(date, days) {
+	
+	if (typeof date.getTime !== "function") {
+		return "Помилка: вхідне значення має бути об'єктом Date"
+	}
+	if (typeof days !== "number") {
+		return "Помилка: кількість днів має бути числом"  
+		
+	}
+	let inputDate = new Date (date);
+	
+	let resultDate = new Date (inputDate.setDate(inputDate.getDate(date) + days));
+	let obj = {inputDate: date,
+		addedDays: days,
+		resultDate: resultDate
+	}
+	return obj
   // Перевірка, чи є вхідне значення об'єктом Date,це можно зробити перевіривши чи є date.getTime по типу функція .
   // Якщо date не є об'єктом Date, повертаємо рядок
   // "Помилка: вхідне значення має бути об'єктом Date"
@@ -206,6 +277,17 @@ let daysOfWeek = [
 ];
 
 function getDayOfWeek(date) {
+	if (typeof date.getTime !== "function") {
+		return "Помилка: вхідне значення має бути об'єктом Date"
+	}
+	let inputDate = new Date (date);
+	let i = inputDate.getDay();
+	console.log(i);
+	
+	let obj = {inputDate: date,
+		dayOfWeek:daysOfWeek[i] 
+	}
+	return obj
   // Перевірка, чи є вхідне значення об'єктом Date,це можно зробити перевіривши чи є date.getTime по типу функція .
   // Якщо date не є об'єктом Date, повертаємо рядок
   // "Помилка: вхідне значення має бути об'єктом Date"
@@ -233,6 +315,22 @@ console.log(getDayOfWeek(new Date("2023-01-01")));
  * }
  */
 function getDaysInMonth(date) {
+	if (typeof date.getTime !== "function") {
+		return "Помилка: вхідне значення має бути об'єктом Date"
+	}
+	let inputDate = new Date (date);
+	let month = inputDate.getMonth(date);
+	let nextMonth = month + 1;
+	
+	let year = inputDate.getFullYear(date);
+	let firstDay = new Date (year, nextMonth, 0); 
+	let daysInMonth = firstDay.getDate();
+	let obj = {
+		inputDate: date,
+   daysInMonth: daysInMonth
+	}
+	return obj;
+	
   // Перевірка, чи є вхідне значення об'єктом Date,це можно зробити перевіривши чи є date.getTime по типу функція .
   // Якщо date не є об'єктом Date, повертаємо рядок
   // "Помилка: вхідне значення має бути об'єктом Date"
@@ -262,6 +360,19 @@ console.log(getDaysInMonth(new Date("2023-02-01")));
  * }
  */
 function getFormattedTime(date) {
+	if (typeof date.getTime !== "function") {
+		return "Помилка: вхідне значення має бути об'єктом Date"
+	}
+	let inputDate = new Date (date);
+	let hours = date.getHours();
+	let minutes = date.getMinutes();
+	let seconds = date.getSeconds();
+	let obj = {
+		inputDate: date,
+		formattedTime: `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
+
+	}
+	return obj;
   // Перевірка, чи є вхідне значення об'єктом Date,це можно зробити перевіривши чи є date.getTime по типу функція .
   // Якщо date не є об'єктом Date, повертаємо рядок
   // "Помилка: вхідне значення має бути об'єктом Date"
@@ -290,6 +401,25 @@ console.log(getFormattedTime(new Date("2023-12-25T09:30:00.000Z")));
  * }
  */
 function getAge(birthDate) {
+	if (typeof date.getTime !== "function") {
+		return "Помилка: вхідне значення має бути об'єктом Date"
+	}
+	let nowDate = new Date ();
+	let dif = nowDate.getFullYear() - birthDate.getFullYear();
+	if (nowDate.getMonth() < birthDate.getMonth() ) {
+		dif -= 1;
+		
+	}
+	else if ( nowDate.getMonth() === birthDate.getMonth()) {
+		if (nowDate.getDate() < birthDate.getDate() )
+		dif -= 1;
+	}
+	let birthDay = new Date(birthDate);
+	let obj = { birthDate: birthDay,
+		age: dif
+		
+	}
+	return obj
   // Перевірка, чи є вхідне значення об'єктом Date,це можно зробити перевіривши чи є birthDate.getTime по типу функція .
   // Якщо birthDate не є об'єктом Date, повертаємо рядок
   // "Помилка: вхідне значення має бути об'єктом Date"
@@ -302,7 +432,7 @@ function getAge(birthDate) {
 }
 console.log("Завдання: 11 ==============================");
 
-console.log(getAge(new Date("1990-05-15")));
+console.log(getAge(new Date("1990-09-15")));
 //Виведе { birthDate: '1990-05-15T00:00:00.000Z', age: 33 }
 
 // Завдання 12
@@ -320,6 +450,24 @@ console.log(getAge(new Date("1990-05-15")));
  * }
  */
 function compareDates(date1, date2) {
+	if ((typeof date1.getTime !== "function")|| (typeof date2.getTime !== "function")) {
+		return "Помилка: вхідне значення має бути об'єктом Date"
+	}
+	function result (data1, data2) { if (data1 < data2 ) {
+		return -1
+	}
+	else if (data1 === data2 ) {
+		return 0
+	}
+	else return 1;}
+	let dateFirst = new Date(date1);
+	let dateSecond = new Date(date2);
+	let obj = {
+		date1: dateFirst,
+		date2: dateSecond,
+		comparison: result (date1, date2)
+	}
+	return obj
   // Перевірка, чи є вхідні значення об'єктами Date.
   // Якщо date1 або date2 не є об'єктами Date, повертаємо рядок
   // "Помилка: вхідне значення має бути об'єктом Date"
@@ -352,6 +500,21 @@ console.log(compareDates(new Date("2023-01-01"), new Date("2022-12-31")));
  * }
  */
 function getDaysDifference(startDate, endDate) {
+	if ((typeof startDate.getTime !== "function" ) || (typeof endDate.getTime !== "function" )) {
+		return "Помилка: вхідне значення має бути об'єктом Date"
+	}
+	let endMilsec = Date.parse(endDate);
+	let startMilsec = Date.parse(startDate);
+	let dif = endMilsec - startMilsec;
+	let days = dif / (1000 * 60 * 60 * 24);
+	let begDay = new Date (startDate);
+	let offDay = new Date (endDate);
+	let obj = {
+		startDate: begDay,
+		endDate: offDay,
+		getDaysDifference: days
+	}
+	return obj
   // Перевірка, чи є вхідні значення об'єктами Date.
   // Якщо startDate або endDate не є об'єктами Date, повертаємо рядок
   // "Помилка: вхідне значення має бути об'єктом Date"
